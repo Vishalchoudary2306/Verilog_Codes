@@ -1,4 +1,3 @@
-
 module half_adder(a,b,s,cr);
 input a,b,clk;
 output reg s,cr;
