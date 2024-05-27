@@ -1,0 +1,40 @@
+module FOUR_BIT_PARALLEL_ADDER(a,b,cin,s,cout);
+input a,b,cin;
+output s,cout;
+assign s=a^b^cin;
+assign cout=a&b|b&cin|cin&a;
+endmodule
+
+module FOUR_BIT(a,b,cin,s,cout);
+
+input [3:0]a;
+input [3:0]b;
+input cin;
+output[3:0]s;
+output [3:0]cout;
+
+FOUR_BIT_PARALLEL_ADDER F1(a[0],b[0],cin,s[0],cout[0]);
+FOUR_BIT_PARALLEL_ADDER F2(a[1],b[1],cout[0],s[1],cout[1]);
+FOUR_BIT_PARALLEL_ADDER F3(a[2],b[2],cout[1],s[2],cout[2]);
+FOUR_BIT_PARALLEL_ADDER F4(a[3],b[3],cout[2],s[3],cout[3]);
+endmodule
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+TESTBENCH
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+module FOUR_BIT_PARALLEL_tb();
+reg [3:0]a;
+reg [3:0]b;
+reg cin;
+wire [3:0]s;
+wire [3:0]cout;
+FOUR_BIT DUT(a,b,cin,s,cout);
+initial
+begin
+a=4'b0;b=4'b0;cin=0;
+#5 a=4'b0001;b=4'b0001;
+#5 a=4'b0010;b=4'b0010;
+$finish;
+end
+endmodule
