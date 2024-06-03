@@ -1,0 +1,28 @@
+module four_bit_sync_upcount(clk,reset,count);
+input clk,reset;
+output reg [3:0]count;
+always @(posedge clk or reset)
+begin
+if (reset==1)
+count<=4'b0000;
+else
+count<=count+1;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TESTBENCH
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+module fourbit_syn_upcount_tb();
+reg clk =0,reset;
+wire [3:0] count;
+four_bit_sync_upcount dut(clk,reset,count );
+ begin
+always #5 clk=~clk;
+end
+initial begin
+reset =1;#5
+reset =0;
+end
+
+endmodule
