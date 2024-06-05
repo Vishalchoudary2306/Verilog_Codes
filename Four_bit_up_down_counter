@@ -1,0 +1,37 @@
+module up_down_counter (clk,reset,mode,count);
+input clk,reset,mode;
+output reg [3:0]count;
+
+always @(posedge clk) begin
+    if (reset) begin
+        count <= 4'b0000;  
+    end else begin
+        if (mode == 0) begin
+            count <= count + 1;
+        end else begin
+            count <= count - 1;
+        end
+    end
+end
+
+endmodule
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TESTNBENCH
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+module up_down_count_tb( );
+reg clk=0,reset,mode;
+wire [3:0] count;
+up_down_counter dut(clk,reset,mode,count);
+begin 
+always #5 clk=~clk;
+end
+initial begin
+ reset = 1;
+  mode = 0;
+   #120 reset = 0;
+
+   #240 mode = 1; 
+   #120 reset = 1;
+   $finish;
+end
+endmodule
