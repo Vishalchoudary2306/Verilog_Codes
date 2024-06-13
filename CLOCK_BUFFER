@@ -1,0 +1,50 @@
+module clk_buf(clk_in,clk_out);
+input clk_in;
+output clk_out;
+
+buf b1(clk_in,clk_out);
+endmodule
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TESTBENCH
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+module clk_buf_tb();
+reg clk_in;
+wire clk_out;
+realtime t1,t2,t3,t4,t5,t6;
+parameter T=10;
+clk_buf dut(clk_in,clk_out);
+initial 
+begin
+clk_in=1'b0;
+forever #(T/2)clk_in=~clk_in;
+end
+task master;
+begin
+@(posedge clk_in)t1=$realtime;
+@(posedge clk_in)t2=$realtime;
+t3=t2-t1;
+end
+endtask
+task bufout;
+begin
+@(posedge clk_out)t4=$realtime;
+@(posedge clk_out)t5=$realtime;
+t6=t5-t4;
+end
+endtask
+
+task freq_phase;
+realtime f,p;
+begin
+f=t6-t3;
+p=t4-t1;
+$display("freq_diff=%0t,phase_diff=%ot",f,p);
+end 
+endtask
+initial 
+begin
+fork master;
+bufout;
+join freq_phase;
+end
+endmodule
